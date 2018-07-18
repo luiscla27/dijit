@@ -1571,10 +1571,20 @@ define([
 			//		Focus on the specified node (which must be visible)
 			// tags:
 			//		protected
-
-			var scrollLeft = this.domNode.scrollLeft;
+                        var focusNode = this.domNode;
+                        while (focusNode 
+                            && focusNode.scrollTop === 0
+                            && focusNode.scrollLeft === 0
+                            && focusNode.tagName.toUpperCase() !== 'BODY'
+                        ) {
+                            focusNode = focusNode.parentNode;
+                        }
+			var scrollLeft = focusNode.scrollLeft;
+                        var scrollTop = focusNode.scrollTop || 0;
 			this.focusChild(node);
-			this.domNode.scrollLeft = scrollLeft;
+                        setTimeout(function() {
+                             window.scrollTo(scrollLeft, scrollTop);
+                        },0)
 		},
 
 		_onNodeMouseEnter: function(/*dijit/_WidgetBase*/ /*===== node =====*/){
